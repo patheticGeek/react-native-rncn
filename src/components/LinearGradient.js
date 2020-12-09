@@ -16,7 +16,7 @@ import { StylesContext } from "../context"
  * A wrapper for react-native-linear-gradient LinearGradient with className
  * @param {CustomLinearGradientProps} props
  */
-export default function LinearGradient({ direction, grdientCenter, className, style, children, ...props }) {
+export default function LinearGradient({ direction, gradientCenter, className, style, children, ...props }) {
   const classnames = useContext(StylesContext)
 
   if (typeof className === "object") {
@@ -27,7 +27,7 @@ export default function LinearGradient({ direction, grdientCenter, className, st
 
   if (direction) {
     props.useAngle = true
-    props.angleCenter = grdientCenter || { x: 0.5, y: 0.5 }
+    props.angleCenter = gradientCenter || { x: 0.5, y: 0.5 }
     props.angle = 0
     if (direction === "to top right") {
       props.angle = 45

@@ -2,7 +2,6 @@ import React, { ReactChild } from "react"
 import View from "./View"
 import Text from "./Text"
 import Pressable from "./Pressable"
-import { theme } from "../constants"
 
 /**
  * @typedef RadioGroupProps
@@ -12,14 +11,15 @@ import { theme } from "../constants"
  * @property {string|string[]} [radioClassName] Class names applied to radio
  * @property {string|string[]} [selectedButtonClassName] Class names applied to button when selected
  * @property {string|string[]} [selectedLabelClassName] Class names applied to label when selected
- * @property {string|string[]} [selectedRadioClassName] Class names applied to radio when selected
  * @property {ReactChild} [labelComponent] Component to replace the label component with
  * @property {ReactChild} [radioComponent] Component to replace the radio component with
+ * @property {(string|number)} [isMulti] Indicates if multiple can be selected if true value can be array of strings|numbers
  * @property {(string|number)} [value] Value of current option selected
- * @property {VoidFunction} [onChangeValue] On change value
+ * @property {VoidFunction} [onChangeValue] Fires when user clicks on
+ * @property {Function} [getIsSelected] Returns true if selected and false if not selected
  * @property {number} [size] Size of radio
  * @property {string} [color] Selected color of radio
- * @property {*} [buttonProps] Props for pressable component
+ * @property {{}} [buttonProps] Props for pressable component
  * @property {{label: string, value: (string|number)}[]} [options] Class names applied to container
  *
  */
@@ -35,22 +35,26 @@ export default function RadioGroup({
   radioClassName,
   selectedButtonClassName,
   selectedLabelClassName,
-  selectedRadioClassName,
   buttonComponent,
   labelComponent,
   radioComponent,
   onChangeValue,
+  isMulti,
+  getIsSelected,
   options,
   value,
   size,
-  color,
   buttonProps,
   ...props
 }) {
   return (
     <View className={["mgv12", className]} {...props}>
       {options.map((option) => {
-        const isSelected = value === option.value
+        const isSelected = getIsSelected
+          ? getIsSelected(value, option.value)
+          : isMulti
+          ? value.includes(option.value)
+          : value === option.value
         return buttonComponent ? (
           buttonComponent({ isSelected, option })
         ) : (
@@ -64,20 +68,17 @@ export default function RadioGroup({
               radioComponent({ isSelected, option })
             ) : (
               <View
-                className={["border2 alignItemsCenter justifyContentCenter pd4"]}
+                className={["border2 alignItemsCenter justifyContentCenter pd4 roundedPill", isSelected ? "borderPrimary" : "borderMuted"]}
                 style={{
                   width: size,
-                  height: size,
-                  borderRadius: theme.sizes.borderRadiusPill,
-                  borderColor: isSelected ? theme.colors[color] || color : theme.colors["muted"]
+                  height: size
                 }}
               >
                 <View
+                  className={["roundedPill", isSelected && "bgPrimary"]}
                   style={{
                     height: "100%",
-                    width: "100%",
-                    borderRadius: theme.sizes.borderRadiusPill,
-                    backgroundColor: isSelected ? theme.colors[color] || color : theme.colors["transparent"]
+                    width: "100%"
                   }}
                 />
               </View>

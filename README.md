@@ -2,13 +2,13 @@
 
 ## How to use
 
-Wrap your App in StylesProvider
+Wrap your App in StylesProvider and pass your styles object as value
 
 ```jsx
 import React, { useState } from "react"
-import { defaultStyles, StylesProvider, View, Pressable, Text } from "react-native-rncn"
+import { defaultStyles, defaultTheme, StylesProvider, View, Pressable, Text } from "react-native-rncn"
 
-const styles = defaultStyles()
+const styles = defaultStyles(defaultTheme)
 
 function App() {
   const [selected, setSelected] = useState(false)
@@ -124,7 +124,7 @@ eg.
 </View>
 ```
 
-![name-of-you-image](docs-screenshots/simple-row.png)
+![Simple Row example](docs-screenshots/simple-row.png)
 
 Note: if you use bgPrimary or any background color on row it will bleed out so wrap the row View in another View and give that view a background color like
 
@@ -144,7 +144,7 @@ Note: if you use bgPrimary or any background color on row it will bleed out so w
 </View>
 ```
 
-![name-of-you-image](docs-screenshots/row-with-bg.png)
+![Row with bg example](docs-screenshots/row-with-bg.png)
 
 If you just want a flexDirection row and flex items in it use:
 
@@ -162,7 +162,7 @@ If you just want a flexDirection row and flex items in it use:
 </View>
 ```
 
-![name-of-you-image](docs-screenshots/raw-row.png)
+![Row example](docs-screenshots/raw-row.png)
 
 The flex system is same as bootsrap 12 column:
 available flex classes: flex[n]
@@ -207,7 +207,7 @@ consequatur fugit ex voluptatem voluptatum.
 <Text className="xsm">extra small text</Text>
 ```
 
-![name-of-you-image](docs-screenshots/text-styles.png)
+![Text Style example](docs-screenshots/text-styles.png)
 
 #### Border radius:
 
@@ -225,13 +225,13 @@ Example:
 <View className="rounded borderTopRounded borderBottomRightRoundedLg" />
 ```
 
-![name-of-you-image](docs-screenshots/border-radius.png)
+![Border Radius example](docs-screenshots/border-radius.png)
 
 #### Positioning:
 
 Use positionRelative on view you want to position relative to
 
-Use poisitonAbsolute to position view absolutely
+Use positionAbsolute to position view absolutely
 
 To position on sides use: position[Top|Bottom][left|right]
 
@@ -247,11 +247,59 @@ To position on sides use: position[Top|Bottom][left|right]
 </View>
 ```
 
-![name-of-you-image](docs-screenshots/position.png)
+![Positioning example](docs-screenshots/position.png)
 
 #### Elevation
 
-For elevation use: elevation[n] where n is between 1-18
+For elevation use: elevation[n] where n is between 1-24
 
-Exercise for the reader: Document LinearGradient and RadioGroup
-Lol jK! Will do in some years probably...
+#### LinearGradient
+
+Classnames as expected
+Colors is array of colors in order they are to show
+Direction can be between 0-360 or 'to right'|'to left'|'to bottom'|'to top'|'to top right'|'to top left'|'to bottom left'|'to bottom right'
+
+```jsx
+<LinearGradient className="roundedSm" colors={["#283048", "#859398"]} direction="to bottom">
+  <Text className="pdh18 pdv6 textLight">Hello</Text>
+</LinearGradient>
+```
+
+![Linear gradient example](docs-screenshots/linear-gradient.png)
+
+#### RadioGroup
+
+```jsx
+const [selected, setSelected] = useState(null)
+
+<RadioGroup
+  value={selected}
+  onChangeValue={(option) => setSelected(option.value)}
+  options={[
+    { label: "Bar", value: "bar" },
+    { label: "Foo", value: "foo" },
+    { label: "Baz", value: "baz" },
+    { label: "Another", value: "another" },
+  ]}
+/>
+```
+
+![Radio Group example](docs-screenshots/radio-group.png)
+
+For multiple selection
+
+```jsx
+const [selected, setSelected] = useState([])
+
+<RadioGroup
+  isMulti
+  value={selected}
+  onChangeValue={(option) => selected.includes(option.value) ? setSelected([...selected].filter(({value}) => value !== option.value) : setSelected([...selected, option.value])}
+  options={[
+    { label: "Bar", value: "bar" },
+    { label: "Foo", value: "foo" },
+    { label: "Baz", value: "baz" },
+    { label: "Another", value: "another" },
+  ]}
+/>
+```
